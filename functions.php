@@ -13,6 +13,9 @@ function generate_and_send_pdf($html, $dev_email, $client_email)
     try {
         // Step 1: Generate the PDF using Dompdf
         $dompdf = new Dompdf();
+        // allow remote 
+        $dompdf->set_option('isRemoteEnabled', TRUE);
+
 
         // Load HTML into Dompdf
         $dompdf->loadHtml($html);
@@ -78,6 +81,7 @@ function generate_contract($client_name, $client_email)
     $contract = str_replace('[Client Email]', $client_email, $contract);
     $name_with_dashes = str_replace(' ', '-', $client_name);
     file_put_contents("contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php", $contract);
+    return "contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php";
 }
 
 // Function to convert email address into a unique id 

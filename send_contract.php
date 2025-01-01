@@ -44,10 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
 
             // // Send the email
             // $mail->send();
-            sendEmail($dev_email, $clientEmail, 'Contract Notification', 'Hello World', null);
-            $success = "Email successfully sent to $clientName at $clientEmail.";
             
-            generate_contract($clientName, $clientEmail);
+            $contract_path = generate_contract($clientName, $clientEmail);
+            
+            sendEmail($dev_email, $clientEmail, 'Contract Notification', 'Thank you for signing up with us. You can go ahead and sign the contract at localhost:3000/' . $contract_path, null);
+
+            $success = "Email successfully sent to $clientName at $clientEmail.";
 
         } catch (Exception $e) {
             $error = "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";

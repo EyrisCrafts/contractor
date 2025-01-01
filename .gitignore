@@ -1,0 +1,73 @@
+# Dependency directories
+/vendor/
+/node_modules/
+
+# Composer files
+composer.lock
+
+# Temporary files
+*.log
+*.cache
+*.tmp
+*.gz
+
+# IDE and Editor-specific files
+/.vscode/
+/.idea/
+*.sublime-workspace
+*.sublime-project
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment and sensitive files
+.env
+.env.local
+.env.test
+
+# Debugging and profiling files
+*.xdebug
+*.trace
+*.profile
+
+# PHPUnit
+phpunit.xml
+phpunit.xml.dist
+
+# Generated assets and caches
+/public/storage
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/views/*
+/storage/logs/*
+/storage/temp/*
+
+# Laravel-specific (if applicable)
+.phpunit.result.cache
+/public/hot
+/public/storage
+/public/mix-manifest.json
+/node_modules
+.npm
+*.log
+
+# Symfony-specific (if applicable)
+/var/
+/vendor/
+
+# WordPress-specific (if applicable)
+/wp-content/plugins/
+/wp-content/themes/twenty*/
+
+# CI/CD pipelines
+/.github/
+/.gitlab-ci.yml
+
+# Other backup and temporary files
+*.bak
+*.swp
+*.swx
+*.tmp
+*.temp
+*.ol

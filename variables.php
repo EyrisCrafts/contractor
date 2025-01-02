@@ -256,13 +256,19 @@ $CONTRACT_STYLES_PDF = '
 @import url("https://fonts.googleapis.com/css?family=Arapey");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75,600;100,400;100,600;100,700;100,800");
 
-    
+    @page {
+        margin-right: 1in;
+        margin-left: 0.5in;
+        margin-top: 0.5in;
+        padding: 0;
+    }
     body {
         font-family: "Libre Baskerville", serif;
         font-size: 14px;
         line-height: 1.5;
         color: #333;
-        margin: 1in;
+        margin: 0px;
+        padding: 0px; 
     }
 
     /* Typography */

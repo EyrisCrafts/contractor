@@ -151,15 +151,8 @@ else {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contract</title>
-    ' . $CONTRACT_STYLES . '
-  <style>
-  #content {
-    margin: 0 auto;
-    padding: 20px;
-    width: 90%;
-    max-width: 800px;
-  }
-  </style>
+    ' . $CONTRACT_STYLES_PDF . '
+  
 </head>
 
 <body>

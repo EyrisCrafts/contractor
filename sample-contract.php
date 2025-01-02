@@ -10,6 +10,9 @@ if ($CLIENT_SIGNATURE && substr($CLIENT_SIGNATURE, 0, 22) === 'data:image/png;ba
     $CLIENT_SIGNATURE = '<img id="hk" src="' . htmlspecialchars($CLIENT_SIGNATURE) . '" >';
 }
 
+$current_file_name  = basename($_SERVER["PHP_SELF"]) ? basename($_SERVER["PHP_SELF"]) : "index.php";
+$CONTRACT_HTML = str_replace('[Client Name]', $CLIENT_NAME, $CONTRACT_HTML);
+
 if ($CLIENT_SIGNATURE == null)
     echo '
 <!DOCTYPE html>
@@ -76,6 +79,9 @@ else {
       return date("F j, Y") ." at ". date("g:i:s A") ." GMT" . sprintf("%+d", $offset);
   }
   ?>';
+
+    $current_file_name = str_replace('.php', '.html', $current_file_name);
+    header('Location: '.$current_file_name.'#hk');
 
     $DEV_DATE_IP = '
   <div class="date-ip">
@@ -165,6 +171,11 @@ else {
 
 </html>';
 
+    // Generate html file
+    file_put_contents($current_file_name, $SIGNED_DOCUMNET);
     // Generate html
-    generate_and_send_pdf($SIGNED_DOCUMNET_PDF, $dev_email, $CLIENT_EMAIL);
+    generate_and_send_pdf($SIGNED_DOCUMNET_PDF, $dev_email, $CLIENT_EMAIL, $current_file_name);
+
+    unlink(__FILE__);
+    die();
 }

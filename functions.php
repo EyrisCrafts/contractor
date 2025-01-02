@@ -8,13 +8,14 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dompdf\Dompdf;
 
-function generate_and_send_pdf($html, $dev_email, $client_email)
+function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_name)
 {
     try {
         // Step 1: Generate the PDF using Dompdf
         $dompdf = new Dompdf();
         // allow remote 
         $dompdf->set_option('isRemoteEnabled', TRUE);
+        $dompdf->set_option('isHtml5ParserEnabled', true);
 
 
         // Load HTML into Dompdf
@@ -32,6 +33,7 @@ function generate_and_send_pdf($html, $dev_email, $client_email)
         // Save the PDF to a file (optional, if you want to keep a copy)
         $pdfFilePath = 'sample.pdf';
         file_put_contents($pdfFilePath, $pdfOutput);
+        
         // Send one email to the client with the signed contract attached
         sendEmail($dev_email, $client_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput);
         sendEmail($dev_email, $dev_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput);
@@ -75,6 +77,13 @@ function sendEmail($from_email, $to_email, $subject, $body, $attachment) {
 
 function generate_contract($client_name, $client_email)
 {
+    if (!file_exists('contracts')) {
+        mkdir('contracts');
+    }
+    // if file already exists return boolean false
+    if (file_exists("contracts/contract-$client_name-" . email_to_id($client_email) . ".php")) {
+        return false;
+    }
     $contract = file_get_contents('sample-contract.php');
     // change require '../variables.php';  into require '../variables.php';
     $contract = str_replace('[Client Name]', $client_name, $contract);

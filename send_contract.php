@@ -21,36 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         $error = "Invalid email address provided.";
     } else {
         try {
-            // $mail = new PHPMailer(true);
-
-            // // Server settings
-            // $mail->isSMTP();
-            // $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
-            // $mail->SMTPAuth = true;
-            // $mail->Username = 'krafiki143@gmail.com'; // Your Gmail address
-            // $mail->Password = 'epdhedelibfhvcno';   // Your Gmail App Password
-            // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            // $mail->Port = 587;
-
-            // // Recipients
-            // $mail->setFrom($dev_email, $dev_name);
-            // $mail->addAddress($clientEmail, $clientName);
-
-            // // Content
-            // $mail->isHTML(true);
-            // $mail->Subject = 'Contract Notification';
-            // $mail->Body = '<p>Hello Worldhtml</p>';
-            // $mail->AltBody = 'Hello World'; // For non-HTML mail clients
-
-            // // Send the email
-            // $mail->send();
-            
+            // Generate the contract and send it to the client
             $contract_path = generate_contract($clientName, $clientEmail);
-            
-            sendEmail($dev_email, $clientEmail, 'Contract Notification', 'Thank you for signing up with us. You can go ahead and sign the contract at localhost:3000/' . $contract_path, null);
+            if ($contract_path === false) {
+                $success = "Email already sent to $clientName at $clientEmail.";
+            } else {
+                sendEmail($dev_email, $clientEmail, 'Contract Notification', 'Thank you for signing up with us. You can go ahead and sign the contract at localhost:3000/' . $contract_path, null);
 
-            $success = "Email successfully sent to $clientName at $clientEmail.";
-
+                $success = "Email successfully sent to $clientName at $clientEmail.";
+            }
         } catch (Exception $e) {
             $error = "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
@@ -106,9 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
 </head>
 
 <body>
-    <?php if (!empty($success)) echo "<p style='color:green;'>$success</p>"; ?>
-    <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
     <form action="" method="post">
+        <?php if (!empty($success)) echo "<p style='color:green;'>$success</p>"; ?>
+        <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
         <p>Send Contract</p>
         <br />
         <label for="client_name">Client Name:</label><br>

@@ -98,6 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
         <p>Send Contract</p>
         <br />
+        <label for="Sending from">Sending from:</label><br>
+        <input type="text" id="dev_email_address" name="dev_email_address" value="<?php echo htmlspecialchars($dev_email); ?>" disabled ><br><br>
+        
         <label for="client_name">Client Name:</label><br>
         <input type="text" id="client_name" name="client_name" oninput="updateContract()" required><br><br>
 

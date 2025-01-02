@@ -26,7 +26,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
             if ($contract_path === false) {
                 $success = "Email already sent to $clientName at $clientEmail.";
             } else {
-                sendEmail($dev_email, $clientEmail, 'Contract Notification', 'Thank you for signing up with us. You can go ahead and sign the contract at localhost:3000/' . $contract_path, null);
+                $full_contract_path = "http://localhost:3000/$contract_path";
+
+                // Create a clickable link
+                $contract_link = '<a href="' . $full_contract_path . '" target="_blank">' . $full_contract_path . '</a>';
+
+                // Replace [CONTRACT_PATH] with the clickable link
+                $EMAIL_BODY_INITIAL_FOR_CONTRACT_SIGNING = str_replace('[CONTRACT_PATH]', $contract_link, $EMAIL_BODY_INITIAL_FOR_CONTRACT_SIGNING);
+
+                sendEmail($dev_email, $clientEmail, $EMAIL_SUBJECT_INITIAL_FOR_CONTRACT_SIGNING, $EMAIL_BODY_INITIAL_FOR_CONTRACT_SIGNING, null);
 
                 $success = "Email successfully sent to $clientName at $clientEmail.";
             }

@@ -11,7 +11,7 @@ if ($CLIENT_SIGNATURE && substr($CLIENT_SIGNATURE, 0, 22) === 'data:image/png;ba
 }
 
 $current_file_name  = basename($_SERVER["PHP_SELF"]) ? basename($_SERVER["PHP_SELF"]) : "index.php";
-$CONTRACT_HTML = str_replace('[Client Name]', $CLIENT_NAME, $CONTRACT_HTML);
+$CONTRACT_HTML = str_replace('[Client Name2]', $CLIENT_NAME, $CONTRACT_HTML);
 
 if ($CLIENT_SIGNATURE == null)
     echo '

@@ -5,11 +5,13 @@ require $serverRoot . '/functions.php';
 
 $CLIENT_NAME = "[Client Name]";
 $CLIENT_EMAIL = "[Client Email]";
+$CONTRACT_HTML = '[Contract HTML]';
 
 $CLIENT_SIGNATURE = isset($_POST['client_signature']) ? $_POST['client_signature'] : null;
 if ($CLIENT_SIGNATURE && substr($CLIENT_SIGNATURE, 0, 22) === 'data:image/png;base64,') {
     $CLIENT_SIGNATURE = '<img id="hk" src="' . htmlspecialchars($CLIENT_SIGNATURE) . '" >';
 }
+
 
 $current_file_name  = basename($_SERVER["PHP_SELF"]) ? basename($_SERVER["PHP_SELF"]) : "index.php";
 $CONTRACT_HTML = str_replace('[Client Name2]', $CLIENT_NAME, $CONTRACT_HTML);

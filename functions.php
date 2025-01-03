@@ -77,8 +77,7 @@ function sendEmail($from_email, $to_email, $subject, $body, $attachment, $passwo
 }
 
 // Function to generate a copy of contract.php into contract-clientname-uniqueid.php 
-
-function generate_contract($client_name, $client_email)
+function generate_contract($client_name, $client_email, $html)
 {
     if (!file_exists('signed_contracts')) {
         mkdir('signed_contracts');
@@ -98,13 +97,15 @@ function generate_contract($client_name, $client_email)
     $contract = str_replace('[Client Name]', $client_name, $contract);
     $contract = str_replace('[Client Name2]', '[Client Name]', $contract);
     $contract = str_replace('[Client Email]', $client_email, $contract);
+    $escapedHtml = str_replace("'", "\\'", $html);
+    $contract = str_replace('[Contract HTML]', $escapedHtml, $contract);
+    
     $name_with_dashes = str_replace(' ', '-', $client_name);
     file_put_contents("unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php", $contract);
     return "unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php";
 }
 
 // Function to convert email address into a unique id 
-
 function email_to_id($email)
 {
     return md5($email);

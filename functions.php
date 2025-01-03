@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dompdf\Dompdf;
 
-function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_name, $root_path)
+function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_name, $root_path, $dev_app_password)
 {
     try {
         // Step 1: Generate the PDF using Dompdf
@@ -37,8 +37,8 @@ function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_n
         file_put_contents($pdf_file_path, $pdfOutput);
         
         // Send one email to the client with the signed contract attached
-        sendEmail($dev_email, $client_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput);
-        sendEmail($dev_email, $dev_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput);
+        sendEmail($dev_email, $client_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput, $dev_app_password);
+        sendEmail($dev_email, $dev_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput, $dev_app_password);
         // Return sha256 hash of the pdf file
         return hash_file('sha256', $pdf_file_path);
     } catch (Exception $e) {
@@ -47,15 +47,15 @@ function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_n
     }
 }
 
-function sendEmail($from_email, $to_email, $subject, $body, $attachment) {
+function sendEmail($from_email, $to_email, $subject, $body, $attachment, $password) {
     $mail = new PHPMailer(true);
 
     // Server settings
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
     $mail->SMTPAuth = true;
-    $mail->Username = 'krafiki143@gmail.com'; // Your Gmail address
-    $mail->Password = 'epdhedelibfhvcno';   // Your Gmail App Password
+    $mail->Username = $from_email; // Your Gmail address
+    $mail->Password = $password;   // Your Gmail App Password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 

@@ -2,6 +2,7 @@
 $serverRoot = $_SERVER['DOCUMENT_ROOT'];
 require $serverRoot . '/variables.php';
 require $serverRoot . '/functions.php';
+
 $CLIENT_NAME = "[Client Name]";
 $CLIENT_EMAIL = "[Client Email]";
 
@@ -141,7 +142,7 @@ else {
     </body>
     
     </html>';
-    $sha256 = generate_and_send_pdf($SIGNED_DOCUMNET_PDF, $dev_email, $CLIENT_EMAIL, $current_file_name, $serverRoot);
+    $sha256 = generate_and_send_pdf($SIGNED_DOCUMNET_PDF, $dev_email, $CLIENT_EMAIL, $current_file_name, $serverRoot, $dev_app_password);
     $FOOTER_SIGNED = str_replace('[HASH]', $sha256, $FOOTER_SIGNED);
 
 

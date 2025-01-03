@@ -1,8 +1,8 @@
 <?php
 session_start();
+$serverRoot = $_SERVER['DOCUMENT_ROOT'];
+require $serverRoot . '/variables.php';
 
-// Define the correct PIN
-$correct_pin = "12345";
 
 // Handle the PIN submission
 if (isset($_POST['pin'])) {

@@ -6,7 +6,8 @@ $serverRoot = $_SERVER['DOCUMENT_ROOT'];
 // Developer information
 $dev_name = "Waleed";
 $dev_email = "krafiki143@gmail.com";
-
+$dev_app_password = "epdhedelibfhvcno"; 
+$correct_pin = "12345";
 $DEV_SIGNATURE = "data:image/png;base64," . base64_encode(file_get_contents($serverRoot . '/signature.png'));
 $DEV_SIGNATURE = '<img id="dev_signature" src="' . $DEV_SIGNATURE . '" >';
 $DEV_TIMESTAMP  = 'December 29, 2024 at 8:43:03 PM GMT+2';

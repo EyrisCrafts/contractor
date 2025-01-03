@@ -14,7 +14,7 @@ require 'functions.php';
 // Handle PIN login
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pin_login'])) {
     $pin = $_POST['pin'];
-    if ($pin === '12345') {
+    if ($pin === $correct_pin) {
         $_SESSION['authenticated'] = true;
     } else {
         $login_error = "Invalid PIN. Please try again.";
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
                 // Replace [CONTRACT_PATH] with the clickable link
                 $EMAIL_BODY_INITIAL_FOR_CONTRACT_SIGNING = str_replace('[CONTRACT_PATH]', $contract_link, $EMAIL_BODY_INITIAL_FOR_CONTRACT_SIGNING);
 
-                sendEmail($dev_email, $clientEmail, $EMAIL_SUBJECT_INITIAL_FOR_CONTRACT_SIGNING, $EMAIL_BODY_INITIAL_FOR_CONTRACT_SIGNING, null);
+                sendEmail($dev_email, $clientEmail, $EMAIL_SUBJECT_INITIAL_FOR_CONTRACT_SIGNING, $EMAIL_BODY_INITIAL_FOR_CONTRACT_SIGNING, null, $dev_app_password);
 
                 $success = "Email successfully sent to $clientName at $clientEmail.";
             }

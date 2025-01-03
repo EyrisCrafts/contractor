@@ -47,7 +47,7 @@ if (empty($_SESSION['authenticated'])) {
                 border-radius: 5px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
-            input[type="number"] {
+            input {
                 width: 100%;
                 /* padding: 10px; */
                 padding-top: 10px;
@@ -75,7 +75,7 @@ if (empty($_SESSION['authenticated'])) {
         <form id="login-form" action="" method="post">
             <?php if (!empty($login_error)) echo "<p style='color:red;'>$login_error</p>"; ?>
             <p>Please enter your PIN:</p>
-            <input type="number" name="pin" required>
+            <input name="pin" required>
             <button type="submit" name="pin_login">Login</button>
         </form>
     </body>

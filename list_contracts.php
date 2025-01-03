@@ -16,6 +16,69 @@ if (isset($_POST['pin'])) {
 
 // Check if user is authenticated
 $is_authenticated = isset($_SESSION['authenticated']) && $_SESSION['authenticated'];
+
+// Redirect if not logged in
+if (empty($_SESSION['authenticated'])) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                background-color: #f0f0f0;
+            }
+            #login-form {
+                padding: 20px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            input {
+                width: 100%;
+                /* padding: 10px; */
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 0px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="login-form" action="" method="post">
+            <?php if (!empty($login_error)) echo "<p style='color:red;'>$login_error</p>"; ?>
+            <p>Please enter your PIN:</p>
+            <input name="pin" required>
+            <button type="submit" name="pin_login">Login</button>
+        </form>
+    </body>
+    </html>
+    <?php
+    exit;
+}
 ?>
 
 <!DOCTYPE html>

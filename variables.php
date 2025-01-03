@@ -10,6 +10,7 @@ $dev_email = "krafiki143@gmail.com";
 $DEV_SIGNATURE = "data:image/png;base64," . base64_encode(file_get_contents($serverRoot . '/signature.png'));
 $DEV_SIGNATURE = '<img id="dev_signature" src="' . $DEV_SIGNATURE . '" >';
 $DEV_TIMESTAMP  = 'December 29, 2024 at 8:43:03 PM GMT+2';
+$DEV_IP_ADDRESS = '192.168.0.1';
 $devTimeOffset = -120; // dev timestamp offset for timezones
 
 // Email sent when admin sends the contract
@@ -390,6 +391,9 @@ $FOOTER_SIGNED = '
   <div class="compiled-signature">[DEV_SIGNATURE]</div><!--.compiled-signature-->
   <div class="compiled-signature">[CLIENT_SIGNATURE]</div><!--.compiled-signature-->
 </div><!--.compiled-signatures-->
+<div style="margin-top: 20px; font-size: 12px; text-align: center; color: #999;">
+SHA-256 of PDF Hash: [HASH]
+</div>
 <div id="ui-signed">  
   <div class="noprint margin-top invert-colors flexi | animate slide delay-3"
        style="justify-content: center;">

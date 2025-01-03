@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dompdf\Dompdf;
 
-function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_name)
+function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_name, $root_path)
 {
     try {
         // Step 1: Generate the PDF using Dompdf
@@ -31,13 +31,16 @@ function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_n
         $pdfOutput = $dompdf->output();
 
         // Save the PDF to a file (optional, if you want to keep a copy)
+        $pdf_file_name = str_replace('.php', '.pdf', $current_file_name);
+        $pdf_file_path = $root_path . '/signed_contracts_pdf/' . $pdf_file_name;
         // $pdfFilePath = 'sample.pdf';
-        // file_put_contents($pdfFilePath, $pdfOutput);
+        file_put_contents($pdf_file_path, $pdfOutput);
         
         // Send one email to the client with the signed contract attached
         sendEmail($dev_email, $client_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput);
         sendEmail($dev_email, $dev_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput);
-
+        // Return sha256 hash of the pdf file
+        return hash_file('sha256', $pdf_file_path);
     } catch (Exception $e) {
         // echo "An error occurred: {$mail->ErrorInfo}";
         echo "An error occurred: {$e->getMessage()}";
@@ -77,11 +80,17 @@ function sendEmail($from_email, $to_email, $subject, $body, $attachment) {
 
 function generate_contract($client_name, $client_email)
 {
-    if (!file_exists('contracts')) {
-        mkdir('contracts');
+    if (!file_exists('signed_contracts')) {
+        mkdir('signed_contracts');
+    }
+    if (!file_exists('signed_contracts_pdf')) {
+        mkdir('signed_contracts_pdf');
+    }
+    if (!file_exists('unsigned_contracts')) {
+        mkdir('unsigned_contracts');
     }
     // if file already exists return boolean false
-    if (file_exists("contracts/contract-$client_name-" . email_to_id($client_email) . ".php")) {
+    if (file_exists("unsigned_contracts/contract-$client_name-" . email_to_id($client_email) . ".php")) {
         return false;
     }
     $contract = file_get_contents('sample-contract.php');
@@ -90,8 +99,8 @@ function generate_contract($client_name, $client_email)
     $contract = str_replace('[Client Name2]', '[Client Name]', $contract);
     $contract = str_replace('[Client Email]', $client_email, $contract);
     $name_with_dashes = str_replace(' ', '-', $client_name);
-    file_put_contents("contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php", $contract);
-    return "contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php";
+    file_put_contents("unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php", $contract);
+    return "unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php";
 }
 
 // Function to convert email address into a unique id 

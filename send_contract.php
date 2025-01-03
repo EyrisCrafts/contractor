@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -6,13 +7,84 @@ use PHPMailer\PHPMailer\Exception;
 $serverRoot = $_SERVER['DOCUMENT_ROOT'];
 require $serverRoot . '/vendor/autoload.php';
 
-
 // Include the variables file
 require 'variables.php';
 require 'functions.php';
-// variable called $CONTRACT_HTML
 
-// Handle form submission
+// Handle PIN login
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pin_login'])) {
+    $pin = $_POST['pin'];
+    if ($pin === '12345') {
+        $_SESSION['authenticated'] = true;
+    } else {
+        $login_error = "Invalid PIN. Please try again.";
+    }
+}
+
+// Redirect if not logged in
+if (empty($_SESSION['authenticated'])) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                background-color: #f0f0f0;
+            }
+            #login-form {
+                padding: 20px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            input[type="number"] {
+                width: 100%;
+                /* padding: 10px; */
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 0px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="login-form" action="" method="post">
+            <?php if (!empty($login_error)) echo "<p style='color:red;'>$login_error</p>"; ?>
+            <p>Please enter your PIN:</p>
+            <input type="number" name="pin" required>
+            <button type="submit" name="pin_login">Login</button>
+        </form>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+// Handle form submission for sending contracts
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
     $clientName = htmlspecialchars($_POST['client_name']);
     $clientEmail = filter_var($_POST['client_email'], FILTER_VALIDATE_EMAIL);
@@ -57,6 +129,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <?php echo $CONTRACT_STYLES; ?>
     <style>
+            #login-form {
+                padding: 20px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            input[type="number"] {
+                width: 100%;
+                /* padding: 10px; */
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 0px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
         body {
             display: flex;
             justify-content: space-between;
@@ -99,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         <p>Send Contract</p>
         <br />
         <label for="Sending from">Sending from:</label><br>
-        <input type="text" id="dev_email_address" name="dev_email_address" value="<?php echo htmlspecialchars($dev_email); ?>" disabled ><br><br>
+        <input type="text" id="dev_email_address" name="dev_email_address" value="<?php echo htmlspecialchars($dev_email); ?>" disabled><br><br>
         
         <label for="client_name">Client Name:</label><br>
         <input type="text" id="client_name" name="client_name" oninput="updateContract()" required><br><br>
@@ -108,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         <input type="email" id="client_email" name="client_email" required><br><br>
 
         <button type="submit" name="send_contract">Send Contract</button>
-
+        <button type="button" onclick="window.location.href='list_contracts.php';">View Contracts</button>
     </form>
     <div id="contract-section">
         <?php echo $CONTRACT_HTML; ?>

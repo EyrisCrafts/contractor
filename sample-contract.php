@@ -79,13 +79,18 @@ else {
       return date("F j, Y") ." at ". date("g:i:s A") ." GMT" . sprintf("%+d", $offset);
   }
   ?>';
+  $current_file_name_html = str_replace('.php', '.html', $current_file_name);
 
-    $current_file_name = str_replace('.php', '.html', $current_file_name);
-    header('Location: '.$current_file_name.'#hk');
-
+  // Replace 'unsigned_contracts' with 'signed_contracts' in the path
+  $current_file_name_html_path = '/signed_contracts/' . $current_file_name_html;
+  
+  // Redirect to the new URL
+  header('Location: ' . $current_file_name_html_path . '#hk');
+    $ip = $_SERVER['REMOTE_ADDR'];
     $DEV_DATE_IP = '
   <div class="date-ip">
     <strong>Signed on:</strong> ' . $DEV_TIMESTAMP . '
+    <br><strong>IP address:</strong> '  . $DEV_IP_ADDRESS . ' <br>
   </div>';
     $DEV_SIGNATURE .= $DEV_DATE_IP;
 
@@ -93,6 +98,7 @@ else {
     $CLIENT_DATE_IP_PHP =  $CONTRACT_SIGNED_PHP. '
   <div id="date-ip" class="date-ip">
     <strong>Signed on:</strong> <?php echo get_client_date($devTimeOffset); ?>
+    <br><strong>IP address:</strong>' . $ip . ' <br>
   </div>';
 
     // /** 
@@ -114,6 +120,31 @@ else {
     $FOOTER_SIGNED_PRINTABLE = str_replace('[CLIENT_SIGNATURE]', $CLIENT_SIGNATURE, $FOOTER_SIGNED_PRINTABLE);
     $FOOTER_SIGNED_PRINTABLE = str_replace('[DEV_SIGNATURE]', $DEV_SIGNATURE, $FOOTER_SIGNED_PRINTABLE);
 
+    // Generate pdf using a FOOTER_PRINTABLE variable
+    $SIGNED_DOCUMNET_PDF = '
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract</title>
+    ' . $CONTRACT_STYLES_PDF . '
+    
+    </head>
+    
+    <body>
+    <div id="content" class="ql-editor">
+    ' . $CONTRACT_HTML . '
+    ' . $FOOTER_SIGNED_PRINTABLE . '
+    </div>
+    </body>
+    
+    </html>';
+    $sha256 = generate_and_send_pdf($SIGNED_DOCUMNET_PDF, $dev_email, $CLIENT_EMAIL, $current_file_name, $serverRoot);
+    $FOOTER_SIGNED = str_replace('[HASH]', $sha256, $FOOTER_SIGNED);
+
+
     $SIGNED_DOCUMNET = '
 <!DOCTYPE html>
 <html lang="en">
@@ -134,7 +165,6 @@ else {
     ' . $CONTRACT_HTML . '
     ' . $FOOTER_SIGNED . '
             
-
     </div>
 </body>
 
@@ -142,33 +172,9 @@ else {
 
     echo $SIGNED_DOCUMNET;;
 
-    // Generate pdf using a FOOTER_PRINTABLE variable
-    $SIGNED_DOCUMNET_PDF = '
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contract</title>
-    ' . $CONTRACT_STYLES_PDF . '
-  
-</head>
-
-<body>
-    <div id="content" class="ql-editor">
-    ' . $CONTRACT_HTML . '
-    ' . $FOOTER_SIGNED_PRINTABLE . '
-    </div>
-</body>
-
-</html>';
-
     // Generate html file
-    file_put_contents($current_file_name, $SIGNED_DOCUMNET);
-    // Generate html
-    generate_and_send_pdf($SIGNED_DOCUMNET_PDF, $dev_email, $CLIENT_EMAIL, $current_file_name);
-
+    file_put_contents($serverRoot . '/signed_contracts/' . $current_file_name_html, $SIGNED_DOCUMNET);
+    
     unlink(__FILE__);
     die();
 }

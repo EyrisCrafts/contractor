@@ -198,9 +198,9 @@ if (empty($_SESSION['authenticated'])) {
     <?php else: ?>
         <!-- Send to /send_contract.php -->
         <!-- <h4> <a href="send_contract.php">Send Contract to a client</a></h4> -->
-        <button onclick="window.location.href='send_contract.php'">Back to main page</button>
+        <button onclick="window.location.href='/'">Back to main page</button>
 
-        <h2>List of Files</h2>
+        <h2>List of client contracts</h2>
         <div class="file-list">
             <!-- Search Input -->
             <div class="search-container">

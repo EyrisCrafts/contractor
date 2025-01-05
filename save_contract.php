@@ -4,8 +4,8 @@
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-// Ensure required fields are present
-if (!isset($data['name']) || !isset($data['html'])) {
+// Ensure required fields are present signature
+if (!isset($data['name']) || !isset($data['html'])  || !isset($data['signature']) ) {
     http_response_code(400);
     echo json_encode(["message" => "Invalid input data"]);
     exit;
@@ -29,11 +29,15 @@ if (isset($data['id'])) {
     $existingId = $data['id'];
     $contractFound = false;
 
+    // remove back slashes from signature
+    $stripped  = stripslashes($data['signature']);
+
     // Search for the contract with the given ID and update it
     foreach ($contracts as &$contract) {
         if ($contract['id'] === $existingId) {
             $contract['name'] = $data['name'];
             $contract['html'] = $data['html'];
+            $contract['signature'] = $stripped;
             $contractFound = true;
             break;
         }
@@ -65,6 +69,7 @@ if (isset($data['id'])) {
         "id" => $newContractId,
         "name" => $data['name'],
         "html" => $data['html'],
+        "signature" => $data['signature']
     ];
 
     // Add the new contract to the list

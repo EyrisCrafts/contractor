@@ -49,7 +49,8 @@ if ($matchedContract) {
     echo json_encode([
         'id' => $matchedContract['id'],
         'name' => $matchedContract['name'],
-        'html' => $matchedContract['html']
+        'html' => $matchedContract['html'],
+        'signature' => $matchedContract['signature']    
     ]);
 } else {
     http_response_code(404); // Not Found

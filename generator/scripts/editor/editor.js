@@ -9,6 +9,9 @@ import htmlEditButton from "https://cdn.skypack.dev/pin/quill-html-edit-button@v
 //  📙 Package Documentation: https://www.skypack.dev/view/quill-html-edit-button
 
 
+import signature from "../signature/signature.js"
+
+
 import editorSettings from "./editor-settings.js"
 
 import {showToolbar} from "./ios-keyboard-bug.js"
@@ -95,6 +98,14 @@ function getHtmlFromServer(editor, contractName) {
                 const contractName =  document.querySelector("#contract_filename")
                 contractName.value = data.name
                 localStorage.setItem("contract_html", JSON.stringify(delta));
+                // Save signautre localStorage.getItem("dev_signature");
+                console.log("saving signature")
+                localStorage.setItem("dev_signature", data.signature);
+                const sigHandler = signature("#generator-signature-pad");
+                // signature("#generator-signature-pad")
+                sigHandler.getSignatureFromLocalStorageOrFile();
+                
+
             } else {
                 throw new Error('Invalid response format: Missing "html" property');
             }

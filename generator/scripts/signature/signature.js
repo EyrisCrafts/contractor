@@ -49,11 +49,13 @@ export default function signature(selector) {
 
 
     function setSignatureToLocalStorage() {
+        console.log("setting signature to localStorage")
         let data = signaturePad.toDataURL("image/png")
         localStorage.setItem("dev_signature", data)
     }
 
     function getSignatureFromLocalStorageOrFile() {
+        console.log("getting signature from localStorage ")
         let data = localStorage.getItem("dev_signature");
         if (data) {
             // console.log(data)
@@ -97,7 +99,7 @@ export default function signature(selector) {
             }
         })
     }
-
+    return { getSignatureFromLocalStorageOrFile }
 }
 
 

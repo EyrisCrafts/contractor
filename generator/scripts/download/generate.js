@@ -7,11 +7,13 @@ export default async function generate() {
 
     const html = addSlashes(document.querySelector(".editor-container .ql-editor").innerHTML);
     const idFromUrlParam = getUrlParam('id');
+    const signature = localStorage.getItem("dev_signature");
     // Prepare POST request
     const postData = {
         id: idFromUrlParam,
         html,
-        name: contract_filename
+        name: contract_filename,
+        signature: signature
     };
 
     const response = await fetch("/save_contract.php", {

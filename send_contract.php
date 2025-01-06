@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
     } else {
         try {
             $html = "";
-            
+
             foreach ($my_contracts as $contract) {
                 if ($contract['name'] === $contractName) {
                     $html = $contract['html'];
@@ -155,7 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        select, input {
+        select,
+        input {
             width: 100%;
             /* padding: 10px; */
             padding-top: 10px;
@@ -167,10 +168,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
             font-size: 16px;
         }
 
-        select:focus, input:focus {
+        select:focus,
+        input:focus {
             border-color: lightblue;
-            box-shadow: 0 0 5px lightblue; /* Adds a subtle glow effect */
-            outline: none; /* Removes the default outline */
+            box-shadow: 0 0 5px lightblue;
+            /* Adds a subtle glow effect */
+            outline: none;
+            /* Removes the default outline */
         }
 
         button {
@@ -182,11 +186,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
             cursor: pointer;
         }
 
-        input:disabled, select:disabled {
-            background-color: #f0f0f0; /* Light gray background to indicate it's disabled */
-            color: #999; /* Gray text color */
-            border: 1px solid #ccc; /* Slightly faded border */
-            cursor: not-allowed; /* Changes cursor to indicate it's uneditable */
+        input:disabled,
+        select:disabled {
+            background-color: #f0f0f0;
+            /* Light gray background to indicate it's disabled */
+            color: #999;
+            /* Gray text color */
+            border: 1px solid #ccc;
+            /* Slightly faded border */
+            cursor: not-allowed;
+            /* Changes cursor to indicate it's uneditable */
         }
 
 
@@ -197,7 +206,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         body {
             display: flex;
             justify-content: space-between;
-            flex-wrap: wrap; /* Allow items to wrap */
+            flex-wrap: wrap;
+            /* Allow items to wrap */
             margin: 0;
             padding: 20px;
             font-family: Arial, sans-serif;
@@ -214,14 +224,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
             background-color: #f9f9f9;
             border-radius: 5px;
         }
+
         /* Mobile Styles */
         @media (max-width: 768px) {
-            form, #contract-section {
-                width: 100%; /* Full width on mobile */
+
+            form,
+            #contract-section {
+                width: 100%;
+                /* Full width on mobile */
             }
 
             #contract-section {
-                margin-top: 20px; /* Add spacing between form and contract */
+                margin-top: 20px;
+                /* Add spacing between form and contract */
             }
         }
     </style>
@@ -229,28 +244,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         const contracts = <?php echo json_encode(array_column($my_contracts, 'html', 'name')); ?>;
 
         function updateContract() {
-            const clientNameInput = document.getElementById('client_name').value;
-            const clientNameDisplay = document.getElementById('client-name-display');
-
-            // Update the contract display with the entered client name
-            if (clientNameInput) {
-                clientNameDisplay.textContent = clientNameInput;
-            } else {
-                clientNameDisplay.textContent = '[Client Name]';
-            }
-        }
-        function updateInputFromDropdown() {
+            const clientNameInput = document.getElementById('client_name').value.trim();
             const clientDropdown = document.getElementById('client_dropdown');
-            
             const contractSection = document.getElementById('contract-section');
 
-            // Update the contract display
-            const selectedContract = contracts[clientDropdown.value] || `<p>No contract available for this selection.</p>`;
-            contractSection.innerHTML = selectedContract;
-            updateContract();
+            if (contractSection) {
+                // Get the selected contract's original HTML from the contracts variable
+                const originalHtml = contracts[clientDropdown.value] || `<p>No contract available for this selection.</p>`;
+
+                // Replace "[Client Name]" in the original HTML with the entered value
+                const updatedHtml = originalHtml.replace(/\[Client Name\]/g, clientNameInput || "[Client Name]");
+
+                // Update the contract section with the modified HTML
+                contractSection.innerHTML = updatedHtml;
+            } else {
+                console.error("Element with ID 'contract-section' not found.");
+            }
         }
 
+        function updateInputFromDropdown() {
+            const clientDropdown = document.getElementById('client_dropdown');
+            const contractSection = document.getElementById('contract-section');
+
+            if (contractSection) {
+                // Update the contract display with the selected contract's original HTML
+                const selectedContract = contracts[clientDropdown.value] || `<p>No contract available for this selection.</p>`;
+                contractSection.innerHTML = selectedContract;
+            } else {
+                console.error("Element with ID 'contract-section' not found.");
+            }
+
+            // Ensure the "[Client Name]" replacement logic is also applied
+            updateContract();
+        }
     </script>
+
 </head>
 
 <body>
@@ -266,8 +294,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         <input type="text" id="dev_email_address" name="dev_email_address" value="<?php echo htmlspecialchars($dev_email); ?>" disabled><br><br>
 
         <label for="client_dropdown">Select Contract</label><br>
-        <select id="client_dropdown" onchange="updateInputFromDropdown()" name="client_dropdown" >
-            <?php  
+        <select id="client_dropdown" onchange="updateInputFromDropdown()" name="client_dropdown">
+            <?php
             foreach ($my_contracts as $contract) {
                 echo '<option value="' . $contract['name'] . '">' . $contract['name'] . '</option>';
             }
@@ -280,7 +308,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
 
         <label for="client_email">Client Email:</label><br>
         <input type="email" id="client_email" name="client_email" required><br><br>
-        
+
         <div style="display: flex; justify-content: space-between;">
             <button type="submit" name="send_contract">Send Contract</button>
             <button type="button" onclick="window.location.href='list_contracts.php';">View Contracts</button>

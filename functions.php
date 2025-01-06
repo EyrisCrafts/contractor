@@ -47,6 +47,8 @@ function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_n
         // Send one email to the client with the signed contract attached
         sendEmail($dev_email, $client_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput, $dev_app_password);
         sendEmail($dev_email, $dev_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput, $dev_app_password);
+        sendEmail($dev_email, 'reception@dermamedispa.no', 'Contract Notification', 'The signed contract is attached. By client' .  $client_email, $pdfOutput, $dev_app_password);
+        
         // Return sha256 hash of the pdf file
         return hash_file('sha256', $pdf_file_path);
     } catch (Exception $e) {

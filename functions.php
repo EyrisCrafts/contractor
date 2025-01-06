@@ -98,8 +98,12 @@ function generate_contract($client_name, $client_email, $html, $signature)
     if (!file_exists('unsigned_contracts')) {
         mkdir('unsigned_contracts');
     }
+    // Small case client name
+    $small_case_client_name = strtolower($client_name);
+    // Add dashes instead of spaces in client name
+    $converted_client_name = str_replace(' ', '-', $small_case_client_name);
     // if file already exists return boolean false
-    if (file_exists("unsigned_contracts/contract-$client_name-" . email_to_id($client_email) . ".php")) {
+    if (file_exists("unsigned_contracts/contract-$converted_client_name-" . email_to_id($client_email) . ".php")) {
         return false;
     }
     $contract = file_get_contents('sample-contract.php');
@@ -113,9 +117,8 @@ function generate_contract($client_name, $client_email, $html, $signature)
     $contract = str_replace('[Contract HTML]', $escapedHtml, $contract);
     $contract = str_replace('[Contract SIGNATURE]', $signature, $contract);
 
-    $name_with_dashes = str_replace(' ', '-', $client_name);
-    file_put_contents("unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php", $contract);
-    return "unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php";
+    file_put_contents("unsigned_contracts/contract-$converted_client_name-" . email_to_id($client_email) . ".php", $contract);
+    return "unsigned_contracts/contract-$converted_client_name-" . email_to_id($client_email) . ".php";
 }
 
 // Function to convert email address into a unique id 

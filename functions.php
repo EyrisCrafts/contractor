@@ -8,6 +8,15 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dompdf\Dompdf;
 
+function get_contracts()
+{
+    // Define the path to the JSON file
+    $jsonFile = 'my_contracts.json';
+    // Read and decode the JSON file
+    $contracts = json_decode(file_get_contents($jsonFile), true);
+    return $contracts;
+}
+
 function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_name, $root_path, $dev_app_password)
 {
     try {
@@ -35,7 +44,7 @@ function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_n
         $pdf_file_path = $root_path . '/signed_contracts_pdf/' . $pdf_file_name;
         // $pdfFilePath = 'sample.pdf';
         file_put_contents($pdf_file_path, $pdfOutput);
-        
+
         // Send one email to the client with the signed contract attached
         sendEmail($dev_email, $client_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput, $dev_app_password);
         sendEmail($dev_email, $dev_email, 'Contract Notification', 'The signed contract is attached. Thank you for working with us.', $pdfOutput, $dev_app_password);
@@ -47,7 +56,8 @@ function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_n
     }
 }
 
-function sendEmail($from_email, $to_email, $subject, $body, $attachment, $password) {
+function sendEmail($from_email, $to_email, $subject, $body, $attachment, $password)
+{
     $mail = new PHPMailer(true);
 
     // Server settings
@@ -77,7 +87,7 @@ function sendEmail($from_email, $to_email, $subject, $body, $attachment, $passwo
 }
 
 // Function to generate a copy of contract.php into contract-clientname-uniqueid.php 
-function generate_contract($client_name, $client_email, $html)
+function generate_contract($client_name, $client_email, $html, $signature)
 {
     if (!file_exists('signed_contracts')) {
         mkdir('signed_contracts');
@@ -97,9 +107,10 @@ function generate_contract($client_name, $client_email, $html)
     $contract = str_replace('[Client Name]', $client_name, $contract);
     $contract = str_replace('[Client Name2]', '[Client Name]', $contract);
     $contract = str_replace('[Client Email]', $client_email, $contract);
-    $escapedHtml = str_replace("'", "\\'", $html);
+    $escapedHtml = preg_replace("/(?<!\\\\)'/", "\\'", $html);
     $contract = str_replace('[Contract HTML]', $escapedHtml, $contract);
-    
+    $contract = str_replace('[Contract SIGNATURE]', $signature, $contract);
+
     $name_with_dashes = str_replace(' ', '-', $client_name);
     file_put_contents("unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php", $contract);
     return "unsigned_contracts/contract-$name_with_dashes-" . email_to_id($client_email) . ".php";

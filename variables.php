@@ -8,8 +8,8 @@ $dev_name = "Waleed";
 $dev_email = "krafiki143@gmail.com";
 $dev_app_password = "epdhedelibfhvcno"; 
 $correct_pin = "12345";
-$DEV_SIGNATURE = "data:image/png;base64," . base64_encode(file_get_contents($serverRoot . '/signature.png'));
-$DEV_SIGNATURE = '<img id="dev_signature" src="' . $DEV_SIGNATURE . '" >';
+// $DEV_SIGNATURE = "data:image/png;base64," . base64_encode(file_get_contents($serverRoot . '/signature.png'));
+// $DEV_SIGNATURE = '<img id="dev_signature" src="' . $DEV_SIGNATURE . '" >';
 $DEV_TIMESTAMP  = 'December 29, 2024 at 8:43:03 PM GMT+2';
 $DEV_IP_ADDRESS = '192.168.0.1';
 $devTimeOffset = -120; // dev timestamp offset for timezones

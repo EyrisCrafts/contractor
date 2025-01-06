@@ -21,6 +21,7 @@ if (isset($_POST['pin'])) {
     }
 }
 
+
 // Redirect if not logged in
 if (empty($_SESSION['authenticated'])) {
 ?>
@@ -91,6 +92,8 @@ if (empty($_SESSION['authenticated'])) {
     exit;
 }
 
+$my_contracts = get_contracts();
+
 // Handle form submission for sending contracts
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
     $clientName = htmlspecialchars($_POST['client_name']);
@@ -102,14 +105,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
     } else {
         try {
             $html = "";
-            foreach ($Contracts as $contract) {
+            
+            foreach ($my_contracts as $contract) {
                 if ($contract['name'] === $contractName) {
                     $html = $contract['html'];
                 }
             }
 
             // Generate the contract and send it to the client
-            $contract_path = generate_contract($clientName, $clientEmail, $html);
+            $contract_path = generate_contract($clientName, $clientEmail, $html, $contract['signature']);
             if ($contract_path === false) {
                 $success = "Email already sent to $clientName at $clientEmail.";
             } else {
@@ -212,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         }
     </style>
     <script>
-        const contracts = <?php echo json_encode(array_column($Contracts, 'html', 'name')); ?>;
+        const contracts = <?php echo json_encode(array_column($my_contracts, 'html', 'name')); ?>;
 
         function updateContract() {
             const clientNameInput = document.getElementById('client_name').value;
@@ -250,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         <label for="client_dropdown">Select Contract</label><br>
         <select id="client_dropdown" onchange="updateInputFromDropdown()" name="client_dropdown" >
             <?php  
-            foreach ($Contracts as $contract) {
+            foreach ($my_contracts as $contract) {
                 echo '<option value="' . $contract['name'] . '">' . $contract['name'] . '</option>';
             }
             ?>
@@ -270,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
 
     </form>
     <div id="contract-section">
-        <?php echo $Contracts[0]["html"]; ?>
+        <?php echo $my_contracts[0]["html"]; ?>
     </div>
 </body>
 

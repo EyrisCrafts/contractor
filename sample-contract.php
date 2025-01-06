@@ -6,7 +6,8 @@ require $serverRoot . '/functions.php';
 $CLIENT_NAME = "[Client Name]";
 $CLIENT_EMAIL = "[Client Email]";
 $CONTRACT_HTML = '[Contract HTML]';
-
+$CONTRACT_SIGNATURE = '[Contract SIGNATURE]';
+$DEV_SIGNATURE = '<img id="dev_signature" src="' . $CONTRACT_SIGNATURE . '" >';
 $CLIENT_SIGNATURE = isset($_POST['client_signature']) ? $_POST['client_signature'] : null;
 if ($CLIENT_SIGNATURE && substr($CLIENT_SIGNATURE, 0, 22) === 'data:image/png;base64,') {
     $CLIENT_SIGNATURE = '<img id="hk" src="' . htmlspecialchars($CLIENT_SIGNATURE) . '" >';

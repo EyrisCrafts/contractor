@@ -1,4 +1,88 @@
 <?php
+session_start();
+require 'variables.php';
+// Handle PIN login
+if (isset($_POST['pin'])) {
+    $entered_pin = $_POST['pin'];
+    if ($entered_pin === $correct_pin) {
+        $_SESSION['authenticated'] = true;
+    } else {
+        echo "<script>alert('Incorrect PIN');</script>";
+    }
+}
+
+
+// Redirect if not logged in
+if (empty($_SESSION['authenticated'])) {
+
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #login-form {
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-right: 0px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="login-form" action="" method="post">
+    <p>Please enter your PIN:</p>
+        <input name="pin" required>
+        <button type="submit" name="pin_login">Login</button>
+    </form>
+</body>
+
+</html>
+HTML;
+exit;
+}
+?>
+
+<?php
 // Load the contracts from the JSON file
 $contractsFile = 'my_contracts.json';
 $contracts = [];

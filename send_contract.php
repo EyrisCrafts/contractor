@@ -80,7 +80,6 @@ if (empty($_SESSION['authenticated'])) {
 
     <body>
         <form id="login-form" action="" method="post">
-            <?php if (!empty($login_error)) echo "<p style='color:red;'>$login_error</p>"; ?>
             <p>Please enter your PIN:</p>
             <input name="pin" required>
             <button type="submit" name="pin_login">Login</button>

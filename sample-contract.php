@@ -89,7 +89,7 @@ else {
   $current_file_name_html_path = '/signed_contracts/' . $current_file_name_html;
   
   // Redirect to the new URL
-  header('Location: ' . $current_file_name_html_path . '#hk');
+  // header('Location: ' . $current_file_name_html_path . '#hk');
     $ip = $_SERVER['REMOTE_ADDR'];
     $DEV_DATE_IP = '
   <div class="date-ip">
@@ -174,7 +174,26 @@ else {
 
 </html>';
 
-    echo $SIGNED_DOCUMNET;;
+    echo '<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Signed</title>
+    <script>
+        // Redirect to the generated HTML file
+        const redirectPath = "' . $current_file_name_html_path . '";
+        console.log("Redirecting to:", redirectPath);
+        window.location.href = redirectPath + "#hk";
+    </script>
+</head>
+
+<body>
+    <p>Redirecting to the signed contract...</p>
+</body>
+
+</html>';
 
     // Generate html file
     file_put_contents($serverRoot . '/signed_contracts/' . $current_file_name_html, $SIGNED_DOCUMNET);

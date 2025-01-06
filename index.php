@@ -2,15 +2,17 @@
 session_start();
 require 'variables.php';
 // Handle PIN login
-if (isset($_POST['pin'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pin'])) {
     $entered_pin = $_POST['pin'];
     if ($entered_pin === $correct_pin) {
         $_SESSION['authenticated'] = true;
+        // Redirect to the home page
+        header('Location: /');
+        exit;
     } else {
         echo "<script>alert('Incorrect PIN');</script>";
     }
 }
-
 
 // Redirect if not logged in
 if (empty($_SESSION['authenticated'])) {

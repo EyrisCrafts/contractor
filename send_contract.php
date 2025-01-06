@@ -311,7 +311,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
 
         <div style="display: flex; justify-content: space-between;">
             <button type="submit" name="send_contract">Send Contract</button>
-            <button type="button" onclick="window.location.href='list_contracts.php';">View Contracts</button>
         </div>
 
     </form>

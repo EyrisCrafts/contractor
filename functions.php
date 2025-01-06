@@ -25,8 +25,7 @@ function generate_and_send_pdf($html, $dev_email, $client_email, $current_file_n
         // allow remote 
         $dompdf->set_option('isRemoteEnabled', TRUE);
         $dompdf->set_option('isHtml5ParserEnabled', true);
-
-
+        
         // Load HTML into Dompdf
         $dompdf->loadHtml($html);
 
@@ -70,8 +69,10 @@ function sendEmail($from_email, $to_email, $subject, $body, $attachment, $passwo
     $mail->Port = 587;
 
     // Recipients
-    $mail->setFrom($from_email, $from_email);
+    $mail->setFrom('reception@dermamedispa.no', 'Dermamedispa');
     $mail->addAddress($to_email, $to_email);
+    
+    $mail->addReplyTo("reception@dermamedispa.no", "Dermamedispa");
     if ($attachment) {
         $mail->addStringAttachment($attachment, 'contract.pdf');
     }

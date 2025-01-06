@@ -102,6 +102,14 @@ if (file_exists($contractsFile)) {
             font-size: 1rem;
             font-weight: 500;
         }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+        }
     </style>
 </head>
 
@@ -109,10 +117,10 @@ if (file_exists($contractsFile)) {
     <div class="container">
         <div class="top-bar">
             <div class="left">
-                <a class="button" href="/">Back to Main Menu</a>
+                <a class="button" href="/">Home</a>
             </div>
             <div class="right">
-                <a class="button" href="/generator/edit.html">Create a New Contract</a>
+                <a class="button" href="/generator/edit.html">New Contract</a>
             </div>
         </div>
         <h1>My Contracts</h1>

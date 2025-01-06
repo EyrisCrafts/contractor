@@ -198,6 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
         body {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap; /* Allow items to wrap */
             margin: 0;
             padding: 20px;
             font-family: Arial, sans-serif;
@@ -213,6 +214,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
             border: 1px solid #ccc;
             background-color: #f9f9f9;
             border-radius: 5px;
+        }
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            form, #contract-section {
+                width: 100%; /* Full width on mobile */
+            }
+
+            #contract-section {
+                margin-top: 20px; /* Add spacing between form and contract */
+            }
         }
     </style>
     <script>
@@ -247,6 +258,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contract'])) {
     <form action="" method="post">
         <?php if (!empty($success)) echo "<p style='color:green;'>$success</p>"; ?>
         <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
+
+        <br />
+        <button onclick="window.location.href='/'">Back to main page</button>
+        <br />
         <br />
         <label for="Sending from">Sending from:</label><br>
         <input type="text" id="dev_email_address" name="dev_email_address" value="<?php echo htmlspecialchars($dev_email); ?>" disabled><br><br>

@@ -154,6 +154,14 @@ if (empty($_SESSION['authenticated'])) {
         text-decoration: underline;
     }
 
+    .file-name {
+    flex: 1; /* Allow the name to take available space */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+    margin-right: 10px; /* Add space between the name and button */
+}
+
     .open-button {
         padding: 5px 15px;
         background-color: #007bff;

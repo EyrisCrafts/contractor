@@ -107,6 +107,8 @@ function generate_contract($client_name, $client_email, $html, $signature)
     $contract = str_replace('[Client Name]', $client_name, $contract);
     $contract = str_replace('[Client Name2]', '[Client Name]', $contract);
     $contract = str_replace('[Client Email]', $client_email, $contract);
+    // First remove all backslashes from the html
+    $html = stripslashes($html);
     $escapedHtml = preg_replace("/(?<!\\\\)'/", "\\'", $html);
     $contract = str_replace('[Contract HTML]', $escapedHtml, $contract);
     $contract = str_replace('[Contract SIGNATURE]', $signature, $contract);
